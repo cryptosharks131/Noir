@@ -93,7 +93,6 @@ function import_bootstrap() {
 }
 
 function important_information() {
- rm -r ~/.noir/blocks/ ~/.noir/chainstate/ ~/.noir/peers.dat ~/.noir/banlist.dat 
  systemctl start $COIN_NAME.service
  echo
  echo -e "================================================================================================================================"
