@@ -57,7 +57,7 @@ systemctl is-enabled Noir #To check whetether Noir service is enabled on boot or
 The first line (rm noir_update.sh) is not required the very first time you update the node and will return an error if you run it.  This is fine, continue with the update script.
 ```
 rm noir_update.sh*
-wget -q https://raw.githubusercontent.com/cryptosharks131/Ghostnode/master/noir_update.sh
+wget -q https://raw.githubusercontent.com/cryptosharks131/Noir/master/noir_update.sh
 bash noir_update.sh
 ```
 ***
