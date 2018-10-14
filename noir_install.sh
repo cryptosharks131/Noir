@@ -1,15 +1,15 @@
 #!/bin/bash
 
 TMP_FOLDER=$(mktemp -d)
-CONFIG_FILE='nix.conf'
-CONFIGFOLDER='/root/.nix'
-COIN_DAEMON='/usr/local/bin/nixd'
-COIN_CLI='/usr/local/bin/nix-cli'
-COIN_REPO='https://github.com/NixPlatform/NixCore/releases/download/v2.0.3/nix-2.0.3-x86_64-linux-gnu.tar.gz'
-COIN_NAME='NIX'
-COIN_RPC=8332
-COIN_PORT=6214
-#COIN_BS='http://bootstrap.zip'
+CONFIG_FILE='noir.conf'
+CONFIGFOLDER='/root/.noir'
+COIN_DAEMON='/usr/local/bin/noird'
+COIN_CLI='/usr/local/bin/noir-cli'
+COIN_REPO='https://github.com/noirofficial/noir/releases/download/v1.0.0.0/noir-cli-1.0.0.0-ubuntu.zip'
+COIN_NAME='Noir'
+COIN_RPC=8822
+COIN_PORT=8255
+COIN_BS='https://github.com/noirofficial/noir/releases/download/v1.0.0.0/Blockchain.zip'
 
 NODEIP=$(curl -s4 icanhazip.com)
 
@@ -23,15 +23,16 @@ function compile_node() {
   wget -q $COIN_REPO
   compile_error
   COIN_ZIP=$(echo $COIN_REPO | awk -F'/' '{print $NF}')
-  tar xvf $COIN_ZIP --strip 1 >/dev/null 2>&1
+  unzip $COIN_ZIP --strip 1 >/dev/null 2>&1
   compile_error
-  cp bin/nix{d,-cli} /usr/local/bin
+  cp noir{d,-cli} /usr/local/bin
   compile_error
   strip $COIN_DAEMON $COIN_CLI
   cd - >/dev/null 2>&1
-  rm -rf $TMP_FOLDER >/dev/null 2>&1
-  chmod +x /usr/local/bin/nixd
-  chmod +x /usr/local/bin/nix-cli
+  rm -rf noir-tx noir-cli noird
+  rm $COIN_ZIP
+  chmod +x /usr/local/bin/noird
+  chmod +x /usr/local/bin/noir-cli
   clear
 }
 
@@ -94,7 +95,7 @@ EOF
 }
 
 function create_key() {
-  echo -e "Enter your ${RED}$COIN_NAME Ghostnode GenKey${NC}. Leave it blank to generate a new ${RED}Ghostnode GenKey${NC} for you:"
+  echo -e "Enter your ${RED}$COIN_NAME Noirnode GenKey${NC}. Leave it blank to generate a new ${RED}Noirnode GenKey${NC} for you:"
   read -e COINKEY
   if [[ -z "$COINKEY" ]]; then
   $COIN_DAEMON -daemon
@@ -103,12 +104,12 @@ function create_key() {
    echo -e "${RED}$COIN_NAME server couldn not start. Check /var/log/syslog for errors.{$NC}"
    exit 1
   fi
-  COINKEY=$($COIN_CLI ghostnode genkey)
+  COINKEY=$($COIN_CLI noirnode genkey)
   if [ "$?" -gt "0" ];
     then
     echo -e "${RED}Wallet not fully loaded. Let us wait and try again to generate the GenKey${NC}"
     sleep 30
-    COINKEY=$($COIN_CLI ghostnode genkey)
+    COINKEY=$($COIN_CLI noirnode genkey)
   fi
   $COIN_CLI stop
 fi
@@ -121,9 +122,9 @@ function update_config() {
 logintimestamps=1
 maxconnections=256
 #bind=$NODEIP
-ghostnode=1
+noirnode=1
 externalip=$NODEIP:$COIN_PORT
-ghostnodeprivkey=$COINKEY
+noirnodeprivkey=$COINKEY
 EOF
 }
 
@@ -192,7 +193,7 @@ function checks() {
 }
 
 function prepare_system() {
-  echo -e "Preparing the system to install ${GREEN}$COIN_NAME${NC} ghostnode."
+  echo -e "Preparing the system to install ${GREEN}$COIN_NAME${NC} noirnode."
   echo -e "This might take 15-20 minutes and the screen will not move, so please be patient."
   apt-get update >/dev/null 2>&1
   DEBIAN_FRONTEND=noninteractive apt-get update > /dev/null 2>&1
@@ -225,12 +226,12 @@ function prepare_system() {
 function important_information() {
  echo
  echo -e "================================================================================================================================"
- echo -e "$COIN_NAME Ghostnode is up and running listening on port ${RED}$COIN_PORT${NC}."
+ echo -e "$COIN_NAME Noirnode is up and running listening on port ${RED}$COIN_PORT${NC}."
  echo -e "Configuration file is: ${RED}$CONFIGFOLDER/$CONFIG_FILE${NC}"
  echo -e "Start: ${RED}systemctl start $COIN_NAME.service${NC}"
  echo -e "Stop: ${RED}systemctl stop $COIN_NAME.service${NC}"
  echo -e "VPS_IP:PORT ${RED}$NODEIP:$COIN_PORT${NC}"
- echo -e "GHOSTNODE GENKEY is: ${RED}$COINKEY${NC}"
+ echo -e "NOIRNODE GENKEY is: ${RED}$COINKEY${NC}"
  if [[ -n $SENTINEL_REPO  ]]; then
   echo -e "${RED}Sentinel${NC} is installed in ${RED}/sentinel${NC}"
   echo -e "Sentinel logs is: ${RED}$CONFIGFOLDER/sentinel.log${NC}"
@@ -245,10 +246,9 @@ function import_bootstrap() {
   COIN_ZIP=$(echo $COIN_BS | awk -F'/' '{print $NF}')
   unzip $COIN_ZIP >/dev/null 2>&1
   compile_error
-  cp -r ~/bootstrap/blocks ~/.nix/blocks
-  cp -r ~/bootstrap/chainstate ~/.nix/chainstate
-  cp -r ~/bootstrap/peers.dat ~/.nix/peers.dat
-  rm -r ~/bootstrap/
+  cp -r ~/Blockchain/blocks ~/.noir/blocks
+  cp -r ~/Blockchain/chainstate ~/.noir/chainstate
+  rm -r ~/Blockchain/
   rm $COIN_ZIP
 }
 
