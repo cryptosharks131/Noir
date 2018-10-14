@@ -1,10 +1,10 @@
 #!/bin/bash
 
 TMP_FOLDER=$(mktemp -d)
-COIN_DAEMON='/usr/local/bin/nixd'
-COIN_CLI='/usr/local/bin/nix-cli'
-COIN_REPO='https://github.com/NixPlatform/NixCore/releases/download/v2.0.3/nix-2.0.3-x86_64-linux-gnu.tar.gz'
-COIN_NAME='NIX'
+COIN_DAEMON='/usr/local/bin/noird'
+COIN_CLI='/usr/local/bin/noir-cli'
+COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v1.0.0/noir.tar.gz'
+COIN_NAME='Noir'
 #COIN_BS='http://bootstrap.zip'
 
 RED='\033[0;31m'
@@ -13,20 +13,20 @@ NC='\033[0m'
 
 function update_node() {
   echo -e "Preparing to download updated $COIN_NAME"
-  rm /usr/local/bin/nix*
+  rm /usr/local/bin/noir*
   cd $TMP_FOLDER
   wget -q $COIN_REPO
   compile_error
   COIN_ZIP=$(echo $COIN_REPO | awk -F'/' '{print $NF}')
   tar xvf $COIN_ZIP --strip 1 >/dev/null 2>&1
   compile_error
-  cp bin/nix{d,-cli} /usr/local/bin
+  cp bin/noir{d,-cli} /usr/local/bin
   compile_error
   strip $COIN_DAEMON $COIN_CLI
   cd - >/dev/null 2>&1
   rm -rf $TMP_FOLDER >/dev/null 2>&1
-  chmod +x /usr/local/bin/nixd
-  chmod +x /usr/local/bin/nix-cli
+  chmod +x /usr/local/bin/noird
+  chmod +x /usr/local/bin/noir-cli
   clear
 }
 
@@ -51,7 +51,7 @@ fi
 }
 
 function prepare_system() {
-echo -e "Updating the system and the ${GREEN}$COIN_NAME${NC} ghostnode."
+echo -e "Updating the system and the ${GREEN}$COIN_NAME${NC} noirnode."
 apt-get update >/dev/null 2>&1
 DEBIAN_FRONTEND=noninteractive apt-get update > /dev/null 2>&1
 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y -qq upgrade >/dev/null 2>&1
@@ -71,32 +71,33 @@ bsdmainutils libdb4.8++-dev libminiupnpc-dev libgmp3-dev libzmq3-dev ufw fail2ba
  exit 1
 fi
 systemctl stop $COIN_NAME.service
+noir-cli stop >/dev/null 2>&1
 sleep 3
-pkill -9 nixd
+pkill -9 noird
 clear
 }
 
 function import_bootstrap() {
-  rm -r ~/.nix/blocks ~/.nix/chainstate ~/.nix/peers.dat
+  rm -r ~/.noir/blocks ~/.noir/chainstate ~/.noir/peers.dat
   wget -q $COIN_BS
   compile_error
   COIN_ZIP=$(echo $COIN_BS | awk -F'/' '{print $NF}')
   unzip $COIN_ZIP >/dev/null 2>&1
   compile_error
-  cp -r ~/bootstrap/blocks ~/.nix/blocks
-  cp -r ~/bootstrap/chainstate ~/.nix/chainstate
-  cp -r ~/bootstrap/peers.dat ~/.nix/peers.dat
+  cp -r ~/bootstrap/blocks ~/.noir/blocks
+  cp -r ~/bootstrap/chainstate ~/.noir/chainstate
+  cp -r ~/bootstrap/peers.dat ~/.noir/peers.dat
   rm -r ~/bootstrap/
   rm $COIN_ZIP
   echo -e "Sync is complete"
 }
 
 function important_information() {
- rm -r ~/.nix/blocks/ ~/.nix/chainstate/ ~/.nix/peers.dat ~/.nix/banlist.dat 
+ rm -r ~/.noir/blocks/ ~/.noir/chainstate/ ~/.noir/peers.dat ~/.noir/banlist.dat 
  systemctl start $COIN_NAME.service
  echo
  echo -e "================================================================================================================================"
- echo -e "$COIN_NAME Ghostnode is updated and running again!"
+ echo -e "$COIN_NAME Noirnode is updated and running again!"
  echo -e "Start: ${RED}systemctl start $COIN_NAME.service${NC}"
  echo -e "Stop: ${RED}systemctl stop $COIN_NAME.service${NC}"
  echo -e "Please check ${RED}$COIN_NAME${NC} is running with the following command: ${RED}systemctl status $COIN_NAME.service${NC}"
