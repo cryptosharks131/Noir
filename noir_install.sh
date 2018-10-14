@@ -240,6 +240,7 @@ function important_information() {
 }
 
 function import_bootstrap() {
+  echo -e "Importing Bootstrap For $COIN_NAME"
   cd $TMP_BS
   wget -q $COIN_BS
   compile_error
@@ -251,6 +252,7 @@ function import_bootstrap() {
   cp -r peers.dat ~/.noir/
   cd - >/dev/null 2>&1
   rm -rf $TMP_BS >/dev/null 2>&1
+  clear
 }
 
 function setup_node() {
