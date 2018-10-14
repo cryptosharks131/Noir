@@ -1,6 +1,7 @@
 #!/bin/bash
 
 TMP_FOLDER=$(mktemp -d)
+TMP_BS=$(mktemp -d)
 CONFIG_FILE='noir.conf'
 CONFIGFOLDER='/root/.noir'
 COIN_DAEMON='/usr/local/bin/noird'
@@ -240,7 +241,7 @@ function important_information() {
 }
 
 function import_bootstrap() {
-  cd $TMP_FOLDER
+  cd $TMP_BS
   wget -q $COIN_BS
   compile_error
   COIN_ZIP=$(echo $COIN_BS | awk -F'/' '{print $NF}')
@@ -250,7 +251,7 @@ function import_bootstrap() {
   cp -r chainstate ~/.noir/
   cp -r peers.dat ~/.noir/
   cd - >/dev/null 2>&1
-  rm -rf $TMP_FOLDER >/dev/null 2>&1
+  rm -rf $TMP_BS >/dev/null 2>&1
 }
 
 function setup_node() {
