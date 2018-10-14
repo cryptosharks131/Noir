@@ -5,11 +5,11 @@ CONFIG_FILE='noir.conf'
 CONFIGFOLDER='/root/.noir'
 COIN_DAEMON='/usr/local/bin/noird'
 COIN_CLI='/usr/local/bin/noir-cli'
-COIN_REPO='https://github.com/noirofficial/noir/releases/download/v1.0.0.0/noir-cli-1.0.0.0-ubuntu.zip'
+COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v1.0.0/noir.tar.gz'
 COIN_NAME='Noir'
 COIN_RPC=8822
 COIN_PORT=8255
-COIN_BS='https://github.com/noirofficial/noir/releases/download/v1.0.0.0/Blockchain.zip'
+COIN_BS='https://github.com/cryptosharks131/Noir/releases/download/v1.0.0/bootstrap.tar.gz'
 
 NODEIP=$(curl -s4 icanhazip.com)
 
@@ -23,14 +23,13 @@ function compile_node() {
   wget -q $COIN_REPO
   compile_error
   COIN_ZIP=$(echo $COIN_REPO | awk -F'/' '{print $NF}')
-  unzip $COIN_ZIP --strip 1 >/dev/null 2>&1
+  tar xvf $COIN_ZIP --strip 1 >/dev/null 2>&1
   compile_error
   cp noir{d,-cli} /usr/local/bin
   compile_error
   strip $COIN_DAEMON $COIN_CLI
   cd - >/dev/null 2>&1
-  rm -rf noir-tx noir-cli noird
-  rm $COIN_ZIP
+  rm -rf $TMP_FOLDER >/dev/null 2>&1
   chmod +x /usr/local/bin/noird
   chmod +x /usr/local/bin/noir-cli
   clear
@@ -241,21 +240,23 @@ function important_information() {
 }
 
 function import_bootstrap() {
+  cd $TMP_FOLDER
   wget -q $COIN_BS
   compile_error
   COIN_ZIP=$(echo $COIN_BS | awk -F'/' '{print $NF}')
-  unzip $COIN_ZIP >/dev/null 2>&1
+  tar xvf $COIN_ZIP --strip 1 >/dev/null 2>&1
   compile_error
-  cp -r ~/Blockchain/blocks ~/.noir/blocks
-  cp -r ~/Blockchain/chainstate ~/.noir/chainstate
-  rm -r ~/Blockchain/
-  rm $COIN_ZIP
+  cp -r blocks ~/.noir/
+  cp -r chainstate ~/.noir/
+  cp -r peers.dat ~/.noir/
+  cd - >/dev/null 2>&1
+  rm -rf $TMP_FOLDER >/dev/null 2>&1
 }
 
 function setup_node() {
   get_ip
   create_config
-  #import_bootstrap
+  import_bootstrap
   create_key
   update_config
   enable_firewall
