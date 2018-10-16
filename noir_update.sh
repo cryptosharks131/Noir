@@ -3,7 +3,7 @@
 TMP_FOLDER=$(mktemp -d)
 COIN_DAEMON='/usr/local/bin/noird'
 COIN_CLI='/usr/local/bin/noir-cli'
-COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v1.0.0/noir.tar.gz'
+COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v1.0.1/noir.tar.gz'
 COIN_NAME='Noir'
 #COIN_BS='http://bootstrap.zip'
 
