@@ -3,9 +3,9 @@
 TMP_FOLDER=$(mktemp -d)
 COIN_DAEMON='/usr/local/bin/noird'
 COIN_CLI='/usr/local/bin/noir-cli'
-COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v1.0.1/noir.tar.gz'
+COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v1.0.2/noir.tar.gz'
 COIN_NAME='Noir'
-#COIN_BS='http://bootstrap.zip'
+COIN_BS='https://github.com/cryptosharks131/Noir/releases/download/v1.0.2/bootstrap.tar.gz'
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -78,18 +78,18 @@ clear
 }
 
 function import_bootstrap() {
+  echo -e "Importing Bootstrap For $COIN_NAME"
   rm -r ~/.noir/blocks ~/.noir/chainstate ~/.noir/peers.dat
+  cd $TMP_BS
   wget -q $COIN_BS
   compile_error
   COIN_ZIP=$(echo $COIN_BS | awk -F'/' '{print $NF}')
-  unzip $COIN_ZIP >/dev/null 2>&1
+  tar xvf $COIN_ZIP --strip 1 >/dev/null 2>&1
   compile_error
-  cp -r ~/bootstrap/blocks ~/.noir/blocks
-  cp -r ~/bootstrap/chainstate ~/.noir/chainstate
-  cp -r ~/bootstrap/peers.dat ~/.noir/peers.dat
-  rm -r ~/bootstrap/
-  rm $COIN_ZIP
-  echo -e "Sync is complete"
+  cp -r blocks chainstate peers.dat ~/.noir/
+  cd - >/dev/null 2>&1
+  rm -rf $TMP_BS >/dev/null 2>&1
+  clear
 }
 
 function important_information() {
@@ -109,5 +109,5 @@ clear
 checks
 prepare_system
 update_node
-#import_bootstrap
+import_bootstrap
 important_information
