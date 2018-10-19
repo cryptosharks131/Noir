@@ -1,6 +1,7 @@
 #!/bin/bash
 
 TMP_FOLDER=$(mktemp -d)
+TMP_BS=$(mktemp -d)
 COIN_DAEMON='/usr/local/bin/noird'
 COIN_CLI='/usr/local/bin/noir-cli'
 COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v1.0.2/noir.tar.gz'
