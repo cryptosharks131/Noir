@@ -10,7 +10,7 @@ COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v1.0.3/noir
 COIN_NAME='Noir'
 COIN_RPC=8822
 COIN_PORT=8255
-COIN_BS='https://github.com/cryptosharks131/Noir/releases/download/v1.0.2/bootstrap.tar.gz'
+COIN_BS='https://github.com/cryptosharks131/Noir/releases/download/v1.0.3/bootstrap.tar.gz'
 
 NODEIP=$(curl -s4 icanhazip.com)
 
