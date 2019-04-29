@@ -34,10 +34,9 @@ function update_node() {
 function compile_error() {
 if [ "$?" -gt "0" ];
  then
-  echo -e "${RED}Failed to compile $COIN_NAME. Please investigate.${NC}"
-  exit 1
+   echo -e "${RED}Failed to compile $COIN_NAME. Please investigate.${NC}"
+   exit 1
 fi
-}
 
 function checks() {
 if [[ $(lsb_release -d) != *16.04* ]]; then
