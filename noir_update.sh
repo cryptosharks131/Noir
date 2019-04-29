@@ -37,13 +37,13 @@ if [ "$?" -gt "0" ];
    echo -e "${RED}Failed to compile $COIN_NAME. Please investigate.${NC}"
    exit 1
 fi
+}
 
 function checks() {
 if [[ $(lsb_release -d) != *16.04* ]]; then
     echo -e "${RED}You are not running Ubuntu 16.04. Installation is cancelled.${NC}"
     exit 1
 fi
-}
 
 if [[ $EUID -ne 0 ]]; then
    echo -e "${RED}$0 must be run as root.${NC}"
