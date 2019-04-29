@@ -7,6 +7,7 @@ CONFIGFOLDER='/root/.noir'
 COIN_DAEMON='/usr/local/bin/noird'
 COIN_CLI='/usr/local/bin/noir-cli'
 COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v1.0.1.1/noir.tar.gz'
+COIN_REPO18='https://github.com/cryptosharks131/Noir/releases/download/v1.0.1.1/noir18.tar.gz'
 COIN_NAME='Noir'
 COIN_RPC=8822
 COIN_PORT=8255
@@ -175,10 +176,14 @@ function compile_error() {
 
 
 function checks() {
-  if [[ $(lsb_release -d) != *16.04* ]]; then
-    echo -e "${RED}You are not running Ubuntu 16.04. Installation is cancelled.${NC}"
-    exit 1
-  fi
+  if [[ $(lsb_release -d) != *16.04* ]] && [[ $(lsb_release -d) != *18.04* ]]; then
+     echo -e "${RED}You are not running Ubuntu 16.04. Installation is cancelled.${NC}"	   echo -e "${RED}You are not running Ubuntu 16.04 or 18.04. Installation is cancelled.${NC}"
+     exit 1
+	fi
+
+  if [[ $(lsb_release -d) != *18.04* ]]; then
+     COIN_REPO = COIN_REPO18
+	fi
 
   if [[ $EUID -ne 0 ]]; then
      echo -e "${RED}$0 must be run as root.${NC}"
