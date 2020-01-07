@@ -11,7 +11,7 @@ COIN_REPO18='https://github.com/cryptosharks131/Noir/releases/download/v2.1.0.2/
 COIN_NAME='Noir'
 COIN_RPC=8822
 COIN_PORT=8255
-COIN_BS='https://github.com/cryptosharks131/Noir/releases/download/v2.0.0.0/bootstrap.tar.gz'
+COIN_BS='https://blockchain.noirofficial.org/bootstraps/noir-blockchain-2020-01-07.tar.gz'
 
 NODEIP=$(curl -s4 icanhazip.com)
 
