@@ -1,11 +1,13 @@
 #!/bin/bash
 
 TMP_FOLDER=$(mktemp -d)
+TMP_BS=$(mktemp -d)
 COIN_DAEMON='/usr/local/bin/noird'
 COIN_CLI='/usr/local/bin/noir-cli'
-COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v1.0.0/noir.tar.gz'
+COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v2.1.0.2/noir.tar.gz'
+COIN_REPO18='https://github.com/cryptosharks131/Noir/releases/download/v2.1.0.2/noir18.tar.gz'
 COIN_NAME='Noir'
-#COIN_BS='http://bootstrap.zip'
+COIN_BS='https://blockchain.noirofficial.org/bootstraps/noir-blockchain-2020-01-07.tar.gz'
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -33,15 +35,19 @@ function update_node() {
 function compile_error() {
 if [ "$?" -gt "0" ];
  then
-  echo -e "${RED}Failed to compile $COIN_NAME. Please investigate.${NC}"
-  exit 1
+   echo -e "${RED}Failed to compile $COIN_NAME. Please investigate.${NC}"
+   exit 1
 fi
 }
 
 function checks() {
-if [[ $(lsb_release -d) != *16.04* ]]; then
-  echo -e "${RED}You are not running Ubuntu 16.04. Installation is cancelled.${NC}"
-  exit 1
+if [[ $(lsb_release -d) != *16.04* ]] && [[ $(lsb_release -d) != *18.04* ]]; then
+   echo -e "${RED}You are not running Ubuntu 16.04 or 18.04. Installation is cancelled.${NC}"
+   exit 1
+fi
+
+if [[ $(lsb_release -d) == *18.04* ]]; then
+   COIN_REPO=$COIN_REPO18
 fi
 
 if [[ $EUID -ne 0 ]]; then
@@ -78,18 +84,18 @@ clear
 }
 
 function import_bootstrap() {
+  echo -e "Importing Bootstrap For $COIN_NAME"
   rm -r ~/.noir/blocks ~/.noir/chainstate ~/.noir/peers.dat
+  cd $TMP_BS
   wget -q $COIN_BS
   compile_error
   COIN_ZIP=$(echo $COIN_BS | awk -F'/' '{print $NF}')
-  unzip $COIN_ZIP >/dev/null 2>&1
+  tar xvf $COIN_ZIP --strip 1 >/dev/null 2>&1
   compile_error
-  cp -r ~/bootstrap/blocks ~/.noir/blocks
-  cp -r ~/bootstrap/chainstate ~/.noir/chainstate
-  cp -r ~/bootstrap/peers.dat ~/.noir/peers.dat
-  rm -r ~/bootstrap/
-  rm $COIN_ZIP
-  echo -e "Sync is complete"
+  cp -r blocks chainstate peers.dat ~/.noir/
+  cd - >/dev/null 2>&1
+  rm -rf $TMP_BS >/dev/null 2>&1
+  clear
 }
 
 function important_information() {
@@ -109,5 +115,5 @@ clear
 checks
 prepare_system
 update_node
-#import_bootstrap
+import_bootstrap
 important_information
