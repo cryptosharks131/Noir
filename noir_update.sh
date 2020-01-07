@@ -7,7 +7,7 @@ COIN_CLI='/usr/local/bin/noir-cli'
 COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v2.1.0.2/noir.tar.gz'
 COIN_REPO18='https://github.com/cryptosharks131/Noir/releases/download/v2.1.0.2/noir18.tar.gz'
 COIN_NAME='Noir'
-COIN_BS='https://github.com/cryptosharks131/Noir/releases/download/v2.0.0.0/bootstrap.tar.gz'
+COIN_BS='https://blockchain.noirofficial.org/bootstraps/noir-blockchain-2020-01-07.tar.gz'
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
