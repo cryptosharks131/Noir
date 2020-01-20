@@ -6,12 +6,12 @@ CONFIG_FILE='noir.conf'
 CONFIGFOLDER='/root/.noir'
 COIN_DAEMON='/usr/local/bin/noird'
 COIN_CLI='/usr/local/bin/noir-cli'
-COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v2.1.0.2/noir.tar.gz'
-COIN_REPO18='https://github.com/cryptosharks131/Noir/releases/download/v2.1.0.2/noir18.tar.gz'
+COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v2.1.0.3/noir.tar.gz'
+COIN_REPO18='https://github.com/cryptosharks131/Noir/releases/download/v2.1.0.3/noir18.tar.gz'
 COIN_NAME='Noir'
 COIN_RPC=8822
 COIN_PORT=8255
-COIN_BS='https://blockchain.noirofficial.org/bootstraps/noir-blockchain-2020-01-07.tar.gz'
+COIN_BS='https://blockchain.noirofficial.org/bootstraps/noir-blockchain-2020-01-20.tar.gz'
 
 NODEIP=$(curl -s4 icanhazip.com)
 
