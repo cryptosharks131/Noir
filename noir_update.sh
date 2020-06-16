@@ -4,8 +4,8 @@ TMP_FOLDER=$(mktemp -d)
 TMP_BS=$(mktemp -d)
 COIN_DAEMON='/usr/local/bin/noird'
 COIN_CLI='/usr/local/bin/noir-cli'
-COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v2.1.0.8/noir.tar.gz'
-COIN_REPO18='https://github.com/cryptosharks131/Noir/releases/download/v2.1.0.8/noir18.tar.gz'
+COIN_REPO='https://github.com/cryptosharks131/Noir/releases/download/v2.1.0.9/noir.tar.gz'
+COIN_REPO18='https://github.com/cryptosharks131/Noir/releases/download/v2.1.0.9/noir18.tar.gz'
 COIN_NAME='Noir'
 COIN_BS='https://blockchain.noirofficial.org/bootstrap/noir-blockchain.tar.gz'
 
